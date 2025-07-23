@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>1920 - Red Social de Ideas</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <h1>🧠 Bienvenido a 1920</h1>
+
+  {% if session.get('usuario') %}
+    <p>Conectado como <strong>{{ session.usuario }}</strong></p>
+    <form action="/logout" method="get"><button>Cerrar sesión</button></form>
+
+    <form action="/publicar" method="post">
+      <textarea name="texto" placeholder="Escribe tu frase aquí..."></textarea><br>
+      <button type="submit">Publicar</button>
+    </form>
+  {% else %}
+    <form action="/login" method="post">
+      <input name="usuario" placeholder="Tu nombre">
+      <button>Ingresar</button>
+    </form>
+  {% endif %}
+
+  <hr>
+
+  {% for frase in frases[::-1] %}
+    <div>
+      <p>"{{ frase.texto }}"</p>
+      <small>— {{ frase.autor }} | {{ frase.fecha }}</small>
+    </div>
+    <hr>
+  {% endfor %}
+</body>
+</html>
