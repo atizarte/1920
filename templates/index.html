@@ -4,33 +4,51 @@
   <meta charset="UTF-8">
   <title>1920 - Red Social de Ideas</title>
   <link rel="stylesheet" href="/static/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-  <h1>🧠 Bienvenido a 1920</h1>
+  <header class="header">
+    <h1 class="logo">🧠 1920</h1>
+    {% if session.get('usuario') %}
+      <div class="user-info">
+        <span>Conectado como <strong>{{ session.usuario }}</strong></span>
+        <form action="/logout" method="get">
+          <button class="btn-outline">Cerrar sesión</button>
+        </form>
+      </div>
+    {% endif %}
+  </header>
 
-  {% if session.get('usuario') %}
-    <p>Conectado como <strong>{{ session.usuario }}</strong></p>
-    <form action="/logout" method="get"><button>Cerrar sesión</button></form>
+  <main class="container">
+    {% if session.get('usuario') %}
+      <form action="/publicar" method="post" class="publicar-form">
+        <textarea name="texto" placeholder="Comparte tu idea..." required></textarea>
+        <button type="submit" class="btn-primary">Publicar</button>
+      </form>
+    {% else %}
+      <form action="/login" method="post" class="login-form">
+        <input name="usuario" placeholder="Tu nombre" required>
+        <button class="btn-primary">Ingresar</button>
+      </form>
+    {% endif %}
 
-    <form action="/publicar" method="post">
-      <textarea name="texto" placeholder="Escribe tu frase aquí..."></textarea><br>
-      <button type="submit">Publicar</button>
-    </form>
-  {% else %}
-    <form action="/login" method="post">
-      <input name="usuario" placeholder="Tu nombre">
-      <button>Ingresar</button>
-    </form>
-  {% endif %}
-
-  <hr>
-
-  {% for frase in frases[::-1] %}
-    <div>
-      <p>"{{ frase.texto }}"</p>
-      <small>— {{ frase.autor }} | {{ frase.fecha }}</small>
-    </div>
-    <hr>
-  {% endfor %}
+    <section class="feed">
+      {% for frase in frases[::-1] %}
+        <article class="frase-card">
+          <p class="frase-text">“{{ frase.texto }}”</p>
+          <div class="frase-meta">
+            <span>— {{ frase.autor }}</span>
+            <span class="fecha">{{ frase.fecha }}</span>
+          </div>
+          <div class="acciones">
+            <button class="accion apoyo">👍</button>
+            <button class="accion no-apoyo">👎</button>
+            <button class="accion comentar">💬</button>
+            <button class="accion compartir">🔗</button>
+          </div>
+        </article>
+      {% endfor %}
+    </section>
+  </main>
 </body>
 </html>
