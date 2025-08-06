@@ -1,22 +1,38 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <title>1920 - Red Social de Ideas</title>
   <link rel="stylesheet" href="/static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script defer>
+    // Modo claro/oscuro
+    function toggleTheme() {
+      const html = document.documentElement;
+      html.dataset.theme = html.dataset.theme === "dark" ? "light" : "dark";
+      localStorage.setItem("theme", html.dataset.theme);
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const saved = localStorage.getItem("theme");
+      if (saved) document.documentElement.dataset.theme = saved;
+    });
+  </script>
 </head>
 <body>
   <header class="header">
     <h1 class="logo">🧠 1920</h1>
-    {% if session.get('usuario') %}
-      <div class="user-info">
-        <span>Conectado como <strong>{{ session.usuario }}</strong></span>
+    <div class="top-bar">
+      <button onclick="toggleTheme()" class="btn-outline">🌗</button>
+      {% if session.get('usuario') %}
+        <span class="user-name">Hola, <strong>{{ session.usuario }}</strong></span>
         <form action="/logout" method="get">
           <button class="btn-outline">Cerrar sesión</button>
         </form>
-      </div>
-    {% endif %}
+      {% endif %}
+    </div>
   </header>
 
   <main class="container">
@@ -41,14 +57,18 @@
             <span class="fecha">{{ frase.fecha }}</span>
           </div>
           <div class="acciones">
-            <button class="accion apoyo">👍</button>
-            <button class="accion no-apoyo">👎</button>
-            <button class="accion comentar">💬</button>
-            <button class="accion compartir">🔗</button>
+            <button class="accion" title="Apoyar">👍</button>
+            <button class="accion" title="No apoyar">👎</button>
+            <button class="accion" title="Comentar">💬</button>
+            <button class="accion" title="Compartir">🔗</button>
           </div>
         </article>
       {% endfor %}
     </section>
   </main>
+
+  <footer class="footer">
+    <p>Desarrollado por Grupo Atizarte</p>
+  </footer>
 </body>
 </html>
